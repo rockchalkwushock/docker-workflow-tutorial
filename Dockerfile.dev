@@ -1,0 +1,18 @@
+FROM node:alpine
+
+WORKDIR /app
+
+COPY package.json .
+
+RUN npm install
+
+COPY . .
+
+CMD ["npm", "run", "start"]
+
+# docker build -f Dockerfile.dev .
+# docker run -p 3000:3000 <id|tag>
+# Using Docker Volumes:
+# docker run -p 3000:3000 -v /app/node_modules -v $(pwd):/app <id|tag>
+# first -v is the bookmark.
+# second -v is mapping the pwd to the /app folder.
