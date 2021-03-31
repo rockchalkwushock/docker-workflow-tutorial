@@ -6,6 +6,9 @@ COPY package.json .
 
 RUN npm install
 
+# We could remove this since we are using
+# Docker Volumes, but it's good to keep it around
+# as a reference in the future.
 COPY . .
 
 CMD ["npm", "run", "start"]

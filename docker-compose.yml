@@ -1,0 +1,14 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    # https://github.com/facebook/create-react-app/issues/8688
+    # https://stackoverflow.com/questions/60790696/react-scripts-start-exiting-in-docker-foreground-cmd
+    stdin_open: true
+    volumes:
+      - /app/node_modules
+      - .:/app
