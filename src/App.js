@@ -1,5 +1,5 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from './logo.svg'
+import './App.css'
 
 function App() {
   return (
@@ -18,8 +18,9 @@ function App() {
           Learn React
         </a>
       </header>
+      <h1>Feature 1</h1>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

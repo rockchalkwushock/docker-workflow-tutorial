@@ -1,5 +1,13 @@
+# https://stackoverflow.com/questions/59759921/how-to-skip-github-actions-job-on-push-event
+# https://github.blog/changelog/2021-02-08-github-actions-skip-pull-request-and-push-workflows-with-skip-ci/
+# The ability to skip a CI run is now available by default in Github Actions:
+# Any of the following if present in a commit message will stop the CI from executing
+# if the event trigger is a "push" or "pull_request"
+# [skip ci], [ci skip], [no ci], [skip actions], or [actions skip]
+
 name: Development
 
+# Only execute this workflow when PR's are made against the development branch.
 on:
   pull_request:
     branches: [development]
@@ -9,33 +17,26 @@ jobs:
     name: Review Code
     runs-on: ubuntu-latest
     steps:
+      # Cancel any previous workflows that are running.
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
+
+      # Get the code from the repository.
       - name: Checkout Code
         uses: actions/checkout@v2
 
+      # Login to Docker using GITHUB_TOKEN & GITHUB_ACTOR (this is your handle on Github, if it is not he same as Docker you will need to update this line.)
       - name: Login to Docker
-        run: echo ${{ github.token }} | docker login -u ${{}} --password-stdin docker.pkg.github.com
+        run: echo ${{ github.token }} | docker login -u ${{ github.actor }} --password-stdin docker.pkg.github.com
 
+      # Build the image(s) with docker-compose.
       - name: Build Images
         run: docker-compose build
 
+      # Run the tests using docker-compose.
+      # We MUST pass the "-e CI=true" or the workflow will hang indefinitely
+      # because "react-scripts test" is in watch mode by default.
       - name: Run Tests
-        run: docker-compose run tests
-
-
-# docker build -f -t rockchalkwushock/fronted Dockerfile.dev .
-# docker run -e CI=true rockchalkwushock/frontend npm run test
-
-
-
-# Step One: Checkout the code
-# Step Two: Login to Docker
-# Step Three: Build the image
-# Step Four: Run the image (for tests)
-
-# Alternatively:
-
-# Step Three: Build the images with docker-compose
-# Step Four: Run the image (for tests)
-
-
-# jest
+        run: docker-compose run -e CI=true tests
