@@ -1,3 +1,10 @@
+# https://stackoverflow.com/questions/59759921/how-to-skip-github-actions-job-on-push-event
+# https://github.blog/changelog/2021-02-08-github-actions-skip-pull-request-and-push-workflows-with-skip-ci/
+# The ability to skip a CI run is now available by default in Github Actions:
+# Any of the following if present in a commit message will stop the CI from executing
+# if the event trigger is a "push" or "pull_request"
+# [skip ci], [ci skip], [no ci], [skip actions], or [actions skip]
+
 name: Development
 
 # Only execute this workflow when PR's are made against the development branch.
