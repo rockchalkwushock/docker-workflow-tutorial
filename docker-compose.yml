@@ -16,8 +16,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    # Don't let Jest watch the files, exit on completion.
-    command: ["npm", "run", "test", " --forceExit"]
+    command: ["npm", "run", "test"]
+    stdin_open: true
     volumes:
       - /app/node_modules
       - .:/app
